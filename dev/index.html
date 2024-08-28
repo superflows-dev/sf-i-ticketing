@@ -20,8 +20,8 @@
         import {SfISubSelect} from 'https://unpkg.com/sf-i-sub-select@1.0.83/sf-i-sub-select.js?module';
         import {SfIEvents} from 'https://unpkg.com/sf-i-events@1.0.513/sf-i-events.js?module';
         import {SfIElasticText} from 'https://unpkg.com/sf-i-elastic-text@1.0.16/sf-i-elastic-text.js?module';
-        import {SfIUploader} from 'https://esm.run/sf-i-uploader@1.0.91/sf-i-uploader.js';
-        import {SfIForm} from 'https://esm.run/sf-i-form@1.0.152/sf-i-form.js';
+        import {SfIUploader} from 'https://esm.run/sf-i-uploader@1.0.92/sf-i-uploader.js';
+        import {SfIForm} from 'https://esm.run/sf-i-form@1.0.167/sf-i-form.js';
     </script>
     <style>
       
@@ -365,13 +365,16 @@
     </style>
   </head>
   <body>
-    <!-- <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="ertzxxho5xy4e5elmevf7elzj40tlsbf.lambda-url.us-east-1.on.aws" mode="downloader"></sf-i-ticketing> -->
-    <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="dwqyez2puoxmu.cloudfront.net/ticketing" mode="view" userid="1c84ef8f-4e72-4ddf-8f9b-6ebd0b740cf3" username="Ninad Thatte" inputIds="[&quot;sf-i-project&quot;, &quot;sf-i-initiator&quot;, &quot;sf-i-assignedto&quot;, &quot;sf-i-category&quot;, &quot;sf-i-priority&quot;, &quot;sf-i-status&quot;, &quot;sf-i-comments&quot;, &quot;sf-i-comment-content&quot;, &quot;sf-i-comment-attachment&quot;]" fields="[&quot;project&quot;,&quot;initiator&quot;,&quot;assignedto&quot;,&quot;ticketcategory&quot;,&quot;ticketpriority&quot;,&quot;ticketstatus&quot;,&quot;comments&quot;]" validations="{&quot;sf-i-category&quot;:  &quot;select&quot;, &quot;sf-i-priority&quot;:  &quot;select&quot;, &quot;sf-i-status&quot;:  &quot;select&quot;, &quot;sf-i-comment-content&quot;:  &quot;select&quot;}" unitfiltersnew="[{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;value&quot;: &quot;d423ccca-f974-4c25-ad34-3414714a4348&quot;},{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;disable&quot;: &quot;true&quot;}]" searchphrase="" selectprojection="name" ignoreprojections="[&quot;comments&quot;,&quot;id&quot;]" mandatory="">
+    <!-- "[&quot;sf-i-project&quot;, &quot;sf-i-initiator&quot;, &quot;sf-i-assignedto&quot;, &quot;sf-i-category&quot;, &quot;sf-i-priority&quot;, &quot;sf-i-status&quot;, &quot;sf-i-comments&quot;, &quot;sf-i-comment-content&quot;, &quot;sf-i-comment-attachment&quot;]" -->
+    <!-- <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="dwqyez2puoxmu.cloudfront.net/ticketing" mode="downloader"></sf-i-ticketing> -->
+    <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="dwqyez2puoxmu.cloudfront.net/ticketing" mode="view" userid="1c84ef8f-4e72-4ddf-8f9b-6ebd0b740cf3" username="Ninad Thatte" inputIds="[&quot;sf-i-project&quot;, &quot;sf-i-initiator&quot;, &quot;sf-i-assignedto&quot;, &quot;sf-i-category&quot;, &quot;sf-i-priority&quot;, &quot;sf-i-status&quot;, &quot;sf-i-comments&quot;, &quot;sf-i-comment-content&quot;, &quot;sf-i-comment-attachment&quot;]" fields="[&quot;project&quot;,&quot;initiator&quot;,&quot;assignedto&quot;,&quot;ticketcategory&quot;,&quot;ticketpriority&quot;,&quot;ticketstatus&quot;,&quot;comments&quot;]" validations="{&quot;sf-i-category&quot;:  &quot;select&quot;, &quot;sf-i-priority&quot;:  &quot;select&quot;, &quot;sf-i-status&quot;:  &quot;select&quot;, &quot;sf-i-comment-content&quot;:  &quot;select&quot;}" unitfiltersnew="[{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;value&quot;: &quot;d423ccca-f974-4c25-ad34-3414714a4348&quot;},{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;disable&quot;: &quot;true&quot;}]" searchphrase="" selectprojection="name" ignoreprojections="[&quot;comments&quot;,&quot;id&quot;]" mandatory="" adminProfileShortcode="FlaggGRC-Administrator">
       <div slot="form">
         <div class="d-flex justify-center align-start" id="new-comment-container">
           <div class="w-100-m-0 mb-20">
             <label id="sf-i-comment-content-label">New Comment *</label><br />
             <input id="sf-i-comment-content" type="text" class="w-100-m-0" mandatory/>
+            <div class="w-100-m-0 max-height-200 flex-col" id="sf-i-changes">
+            </div>
             <label id="sf-i-comment-attachment-label">Attachment</label><br>
             <sf-i-uploader id="sf-i-comment-attachment" max="4" apiid="1peg5170d3" allowedextensions="[&quot;jpg&quot;,&quot;png&quot;]" extract="no" style="display: block;"></sf-i-uploader>
           </div>
@@ -411,19 +414,19 @@
         </div>
         <div class="d-flex justify-center align-start">
           <div class="w-100-m-0 mb-20">
-            <sf-i-form id="sf-i-project" name="Projects" label="Project *" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="select" selectprojection="name" searchphrase="" ignoreprojections="[&quot;logo&quot;,&quot;plan&quot;,&quot;address&quot;,&quot;emails&quot;,&quot;vertical&quot;,&quot;cycledate&quot;,&quot;shortid&quot;,&quot;startdate&quot;,&quot;contractdate&quot;,&quot;quality&quot;,&quot;locations&quot;,&quot;shortnumid&quot;]" mandatory="">
+            <sf-i-form id="sf-i-project" name="Projects" label="Project *" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;logo&quot;,&quot;plan&quot;,&quot;address&quot;,&quot;emails&quot;,&quot;vertical&quot;,&quot;cycledate&quot;,&quot;shortid&quot;,&quot;startdate&quot;,&quot;contractdate&quot;,&quot;quality&quot;,&quot;locations&quot;,&quot;shortnumid&quot;]" mandatory="" maxSelect="1">
             </sf-i-form>
           </div>
         </div>
         <div class="d-flex justify-center align-start">
           <div class="w-100-m-0 mb-20">
-            <sf-i-form id="sf-i-initiator" name="Initiator" label="Initiator" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="select" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]" mandatory="">
+            <sf-i-form id="sf-i-initiator" name="Initiator" label="Initiator" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]" mandatory="" maxSelect="1">
             </sf-i-form>
           </div>
         </div>
         <div class="d-flex justify-center align-start" id="sf-i-assignedto-container">
           <div class="w-100-m-0 mb-20">
-            <sf-i-form id="sf-i-assignedto" name="FlaggGRCC Administrator" label="Assigned To" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="select" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]">
+            <sf-i-form id="sf-i-assignedto" name="FlaggGRCC Administrator" label="Assigned To" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]" maxSelect="1">
             </sf-i-form>
           </div>
         </div>

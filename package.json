@@ -1,7 +1,7 @@
 {
   "name": "sf-i-ticketing",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.17",
   "description": "Superflows Navigation Component",
   "main": "sf-i-ticketing.js",
   "module": "sf-i-ticketing.js",
@@ -54,10 +54,10 @@
     "fs": "^0.0.1-security",
     "lit": "^2.2.4",
     "sf-i-events": "^1.0.22",
-    "sf-i-form": "^1.0.152",
+    "sf-i-form": "^1.0.167",
     "sf-i-select": "^1.0.51",
     "sf-i-sub-select": "^1.0.80",
-    "sf-i-uploader": "^1.0.91",
+    "sf-i-uploader": "^1.0.92",
     "sinon": "^15.0.1"
   },
   "devDependencies": {

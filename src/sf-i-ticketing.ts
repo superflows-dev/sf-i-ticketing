@@ -136,6 +136,9 @@ export class SfITicketing extends LitElement {
   searchInputIds: string = "[]";
 
   @property()
+  adminProfileShortcode: string = "";
+
+  @property()
   preselectedValues!: string;
   
   getPreselectedValues = () => {
@@ -329,6 +332,7 @@ export class SfITicketing extends LitElement {
     .SfITicketingC > div{
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     .SfITicketingC > div > select{
@@ -366,6 +370,16 @@ export class SfITicketing extends LitElement {
       overflow: hidden !important;
       width: 50px;
     }
+    
+    .badge-multiselected-name {
+      font-size: 70%;
+      padding: 5px;
+      border-radius: 10px;
+      border: solid 1px #dddddd;
+      white-space: nowrap;
+      overflow: hidden !important;
+      min-width: 50px;
+    }
 
     ul {
       list-style-type:none;
@@ -383,6 +397,16 @@ export class SfITicketing extends LitElement {
       margin-top: 10px;
     }
 
+    .mt-20 {
+      margin-top: 20px;
+    }
+    .mr-10 {
+      margin-right: 10px;
+    }
+    .pb-10 {
+      padding-bottom: 10px;
+    }
+
     .flex-grow {
       flex-grow: 1;
     }
@@ -394,6 +418,7 @@ export class SfITicketing extends LitElement {
     .left-sticky {
       left: 0px;
       position: sticky;
+      vertical-align: middle !important
     }
 
     .border-right-solid {
@@ -777,8 +802,17 @@ export class SfITicketing extends LitElement {
       flex: 1
     }
 
-    .row-gap-5 {
-      gap: 5px
+    .row-gap-10 {
+      gap: 10px
+    }
+
+    sf-i-form::part(input-label){
+      color: #740039
+    }
+    
+    .no-records-message {
+      width: 100%;
+      text-align: center
     }
 
   `;
@@ -1359,7 +1393,7 @@ export class SfITicketing extends LitElement {
 
         //console.log(this._SfSearchListContainer.querySelector('#search-' + i))
         this._SfSearchListContainer.querySelector('#search-' + i).addEventListener('click', (ev: any) => {
-          // console.log('id', ev.currentTarget.id)
+          console.log('id', ev.currentTarget.id)
           this.selectedId = values[parseInt((ev.currentTarget.id + "").split('-')[1])].id
           this.selectedProjectId = values[parseInt((ev.currentTarget.id + "").split('-')[1])]['project']['value'][0]
           this.mode = "detail";
@@ -1370,7 +1404,7 @@ export class SfITicketing extends LitElement {
 
     } else {
 
-      html += '<h3>No Records Found</h3>'
+      html += '<h3 class="no-records-message" part="no-records-message">No Records Found</h3>'
       this._SfSearchListContainer.innerHTML = html;
 
     }
@@ -2120,6 +2154,9 @@ export class SfITicketing extends LitElement {
     } else {
       const jsonRespose = JSON.parse(xhr.responseText);
       this.setError(jsonRespose.error);
+      setTimeout(()=>{
+        this.clearMessages()
+      },5000)
     }
 
   }
@@ -2406,6 +2443,7 @@ export class SfITicketing extends LitElement {
       this.setSuccess('Operation Successful!');
       if(this.mode == "detail") {
         setTimeout(() => {
+          this.clearInputs();
           this.clearMessages();
           this._SfButtonBack.click();
         }, 2000);
@@ -2443,6 +2481,7 @@ export class SfITicketing extends LitElement {
           values[field] = this.selectedTicketDetails['comments'] ?? []
         }
         let content = this.getInputValue('sf-i-comment-content')
+        content.value += (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLInputElement).innerHTML
         let attachment = this.getInputValue('sf-i-comment-attachment')
         console.log(values[field])
         values[field].push({
@@ -2548,7 +2587,7 @@ export class SfITicketing extends LitElement {
             if(element.hasAttribute('mandatory') && elementSfIForm.selectedValues().length === 0) {
               const errorHtml = '<div class="error-icon d-flex justify-end color-error"><div class="material-symbols-outlined">exclamation</div></div>';
               parentElement.insertAdjacentHTML('beforeend', errorHtml);
-              console.log('evaluate false return', element)
+              console.log('evaluate false return', element, elementSfIForm.selectedValues())
               evaluate = false;
               break;
             } else {
@@ -2697,7 +2736,18 @@ export class SfITicketing extends LitElement {
           }
 
           if(!errInValidation) {
-            if(element.hasAttribute('mandatory') && (element as HTMLInputElement).value.length === 0) {
+            if(element.id == "sf-i-comment-content"){
+              if(((element as HTMLInputElement).value.length + (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLElement).innerHTML.length) == 0){
+                const errorHtml = '<div class="error-icon d-flex justify-end color-error"><div class="material-icons">exclamation</div></div>';
+                parentElement.insertAdjacentHTML('beforeend', errorHtml);
+                console.log('evaluate false return', element, (element as HTMLInputElement).value)
+                evaluate = false;
+                break;
+              }else{
+                const errorHtml = '<div class="error-icon d-flex justify-end color-success"><div class="material-icons">check_circle</div></div>';
+                parentElement.insertAdjacentHTML('beforeend', errorHtml);
+              }
+            }else if(element.hasAttribute('mandatory') && (element as HTMLInputElement).value.length === 0) {
               const errorHtml = '<div class="error-icon d-flex justify-end color-error"><div class="material-icons">exclamation</div></div>';
               parentElement.insertAdjacentHTML('beforeend', errorHtml);
               console.log('evaluate false return', element, (element as HTMLInputElement).value)
@@ -2885,6 +2935,7 @@ export class SfITicketing extends LitElement {
 
     }
     childElement.formatShortlistedSearchPhrase();
+    console.log('SFIFORM_load_Mode',10);
     childElement.loadMode();
 
   }
@@ -2995,6 +3046,9 @@ export class SfITicketing extends LitElement {
           this._sfSlottedForm[0].querySelector('#sf-i-assignedto-container').style.display = 'none'
         }else{
           element.style.display = 'block';
+          (element as SfIForm).searchPhrase = this.adminProfileShortcode;
+          console.log('SFIFORM_load_Mode',1);
+          (element as SfIForm).loadMode()
           this._sfSlottedForm[0].querySelector('#sf-i-assignedto-container').style.display = 'block'
         }
       }else if(this.getInputs()[i] == "sf-i-comments"){
@@ -3041,6 +3095,7 @@ export class SfITicketing extends LitElement {
         }
         if(oldFlow != (element as SfIForm).flow){
           if(reload){
+            console.log('SFIFORM_load_Mode',2);
             (element as SfIForm).loadMode();
           }
         }
@@ -3094,7 +3149,12 @@ export class SfITicketing extends LitElement {
 
         (element as SfIForm).selectedSearchId = [];
         (element as SfIForm).clearSelection();
-        (element as SfIForm).searchPhrase = "";
+        if(element.id == "sf-i-assignedto"){
+          (element as SfIForm).searchPhrase = this.adminProfileShortcode;
+        }else{
+          (element as SfIForm).searchPhrase = "";
+        }
+        console.log('SFIFORM_load_Mode',3);
         (element as SfIForm).loadMode();
 
         // if((element as SfITicketing).selectedSearchId == null || (element as SfITicketing).selectedSearchId == "") {
@@ -3125,6 +3185,7 @@ export class SfITicketing extends LitElement {
 
       if(this.getInputs()[i] == "sf-i-comments"){
         (this._sfSlottedForm[0].querySelector('#sf-i-comment-content') as HTMLInputElement).value = "";
+        (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLInputElement).innerHTML = "";
         let attachementUploader = (this._sfSlottedForm[0].querySelector('#sf-i-comment-attachment') as SfIUploader)
         attachementUploader.prepopulatedInputArr = "[]";
         attachementUploader.clearUploads();
@@ -3395,10 +3456,28 @@ export class SfITicketing extends LitElement {
     if(this.isAdmin()){
       (this._SfSearchFiltersContainer as HTMLElement).classList.remove('hide-important');
       (this._SfSearchBadge as HTMLElement).classList.remove('hide-important');
+      this.initSearchListeners()
       this.fetchMasters(this.renderMastersSearch);
     } else {
       (this._SfSearchFiltersContainer as HTMLElement).classList.add('hide-important');
       (this._SfSearchBadge as HTMLElement).classList.add('hide-important');
+    }
+  }
+
+  initSearchListeners = () => {
+    for(let searchFilterId of this.searchFilterIds){
+      let element = this._SfSearchFiltersContainer.querySelector('#' + searchFilterId) as HTMLElement
+      if (element.tagName.toLowerCase() == "sf-i-form") {
+        (element as SfIForm).addEventListener('valueChanged',()=>{
+          let event = new Event('click');
+          this._sfButtonAll.dispatchEvent(event);
+        });
+      } else if (element.tagName.toLowerCase() == "select") {
+        (element as HTMLSelectElement).addEventListener('change',() => {
+          let event = new Event('click');
+          this._sfButtonAll.dispatchEvent(event);
+        });
+      }
     }
   }
 
@@ -3415,6 +3494,7 @@ export class SfITicketing extends LitElement {
         if (element.tagName.toLowerCase() == "sf-i-form") {
           console.log('search field setting value', element, this.searchParams.filters[searchFilterId].value);
           (element as SfIForm).preselectedValues = JSON.stringify(this.searchParams.filters[searchFilterId].value);
+          console.log('SFIFORM_load_Mode',4);
           (element as SfIForm).loadMode();
           console.log('search field element', (element as SfIForm).selectedId)
         } else if (element.tagName.toLowerCase() == "select") {
@@ -3514,7 +3594,7 @@ export class SfITicketing extends LitElement {
       this.setError(jsonRespose.error);
       setTimeout(() => {
         this.clearMessages();
-      }, 2000);
+      }, 5000);
     }
 
   }
@@ -3548,11 +3628,11 @@ export class SfITicketing extends LitElement {
 
     this._SfSearchStartDate.addEventListener('change', () => {
       this._SfInputEndDate.setAttribute('min', new Date((this._SfSearchStartDate as HTMLInputElement).value).toISOString().slice(0, 10) )
-      this.fetchLogs()
+      // this.fetchLogs()
     });
     this._SfSearchEndDate.addEventListener('change', () => {
       this._SfSearchStartDate.setAttribute('max', new Date((this._SfSearchEndDate as HTMLInputElement).value).toISOString().slice(0, 10) )
-      this.fetchLogs()
+      // this.fetchLogs()
     });
   }
 
@@ -4105,11 +4185,12 @@ export class SfITicketing extends LitElement {
     for(var i = 0; i < this.getInputs().length; i++) {
 
       const element = this._sfSlottedForm[0].querySelector('#' + this.getInputs()[i]);
-
+      let index = i;
       if(element.nodeName.toLowerCase() == "sf-i-select") {
 
         element.addEventListener('valueChanged', () => {
           console.log('value changed', element.nodeName.toLowerCase(), element.value)
+          this.updateComment(index, (element as SfISelect).selectedTexts())
           this.evalSubmit();
           this.processFiltersByEvent();
         });
@@ -4117,6 +4198,7 @@ export class SfITicketing extends LitElement {
       } else if (element.nodeName.toLowerCase() == "sf-i-sub-select") {
 
         element.addEventListener('valueChanged', () => {
+          this.updateComment(index, (element as SfISubSelect).selectedTexts())
           this.evalSubmit();
           this.processFiltersByEvent();
         });
@@ -4124,6 +4206,7 @@ export class SfITicketing extends LitElement {
       } else if (element.nodeName.toLowerCase() == "sf-i-form") {
 
         element.addEventListener('valueChanged', () => {
+          this.updateComment(index, (element as SfIForm).selectedTexts())
           this.evalSubmit();
           this.processFiltersByEvent();
         });
@@ -4146,6 +4229,7 @@ export class SfITicketing extends LitElement {
 
       } else if (element.nodeName.toLowerCase() == "select") {
         element.addEventListener('change', () => {
+          this.updateComment(index, (element as HTMLSelectElement).options[(element as HTMLSelectElement).selectedIndex].text)
           this.evalSubmit();
           this.processFiltersByEvent();
           console.log("select changed")
@@ -4171,6 +4255,29 @@ export class SfITicketing extends LitElement {
       }
 
     }
+  }
+
+  updateComment = (index: number, newValue: any) => {
+    if(this.mode == "new"){
+      return;
+    }
+    if(newValue == ''){
+      return;
+    }
+    let oldText = (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLInputElement).innerHTML;
+    let fieldName = this.getFields()[index];
+    let splitArr = oldText.split('(');
+    let entryFound = false
+    for(let [i, splitStr] of splitArr.entries()){
+      if(splitStr.indexOf(`${fieldName} changed to`) >= 0){
+        splitArr[i] = `${fieldName} changed to ${newValue})`;
+        entryFound = true
+      }
+    }
+    if(!entryFound){
+      splitArr.push(`${fieldName} changed to ${newValue})`)
+    }
+    (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLInputElement).innerHTML = splitArr.join('(')
   }
 
   populateSelectedViewToDetailValues = () => {
@@ -4199,7 +4306,8 @@ export class SfITicketing extends LitElement {
           console.log("input project val", val, element, element.flow)
         }
 
-        (element as SfIForm).selectedSearchId = [val.value[0] ?? ""];
+        (element as SfIForm).selectedSearchId = val.value[0] == null ? [] : [val.value[0]];
+        console.log('SFIFORM_load_Mode',5, element.id);
         (element as SfIForm).loadMode();
         console.log('populating selected', (element as SfIForm).selectedSearchId, element);
       } else if (element.nodeName.toLowerCase() == "sf-i-uploader") {
@@ -4229,13 +4337,13 @@ export class SfITicketing extends LitElement {
             html += `<div part="comment-user" class="comment-user d-flex align-start flex-wrap flex-col align-self-end">`
           }
           
-          html += `<p part="comment-user-name">${tempVal[j]['username']}</p>`
-          html += `<p part="comment-user-content">${tempVal[j]['content']['value']}</p>`
+          html += `<p part="comment-user-content" class="comment-user-content">${tempVal[j]['content']['value']}</p>`
           if(tempVal[j]['attachment'] != null){
-            html += `<sf-i-uploader id="sf-i-comment-attachment-${j}" part="comment-user-attachment" max="10" apiid="1peg5170d3" allowedextensions="[&quot;jpg&quot;,&quot;png&quot;]" extract="no" mode="view" maximize="yes"></sf-i-uploader>`
+            html += `<sf-i-uploader id="sf-i-comment-attachment-${j}" part="comment-user-attachment" class="comment-user-attachment" max="10" apiid="1peg5170d3" allowedextensions="[&quot;jpg&quot;,&quot;png&quot;]" extract="no" mode="view" maximize="yes"></sf-i-uploader>`
           }
+          html += `<p part="comment-user-name" class="comment-user-name">${tempVal[j]['username']}</p>`
           let createDate = new Date(parseInt(tempVal[j]['timestamp']))
-          html += `<p part="comment-user-timestamp">${createDate.toLocaleDateString()}-${createDate.toLocaleTimeString()}</p>`
+          html += `<p part="comment-user-timestamp" class="comment-user-timestamp">${createDate.toLocaleDateString()}-${createDate.toLocaleTimeString()}</p>`
           html += `</div>`
         }
         console.log('comments populated', html);
@@ -4352,6 +4460,7 @@ export class SfITicketing extends LitElement {
 
           console.log('filters-select', "sf-i-form", value);
           (inputElement as SfIForm).selectedSearchId = value;
+          console.log('SFIFORM_load_Mode',6);
           (inputElement as SfIForm).loadMode();
 
         }else{
@@ -4383,6 +4492,7 @@ export class SfITicketing extends LitElement {
 
           console.log('filters-remove', "sf-i-form", value);
           (inputElement as SfIForm).removeItemByValue(value);
+          console.log('SFIFORM_load_Mode',7);
           (inputElement as SfIForm).loadMode();
 
         }
@@ -4422,6 +4532,7 @@ export class SfITicketing extends LitElement {
 
           console.log('filters-select', "sf-i-form", value);
           (inputElement as SfIForm).selectedSearchId = value;
+          console.log('SFIFORM_load_Mode',8);
           (inputElement as SfIForm).loadMode();
 
         }
@@ -4451,6 +4562,7 @@ export class SfITicketing extends LitElement {
 
           console.log('filters-remove', "sf-i-form", value);
           (inputElement as SfIForm).removeItemByValue(value);
+          console.log('SFIFORM_load_Mode',9);
           (inputElement as SfIForm).loadMode();
 
         }
@@ -4529,7 +4641,7 @@ export class SfITicketing extends LitElement {
 
   loadMode = async () => {
 
-    console.log('load mode', this.mode);
+    console.log('load mode sfiticketing', this.mode);
 
     if(this.mode == "multiselect-dropdown") {
 
@@ -4611,9 +4723,10 @@ export class SfITicketing extends LitElement {
         (this._SfSearchEndDate as HTMLInputElement).value = "" + year + "-" + month + "-" + day 
         this._SfSearchEndDate.setAttribute('min', new Date((this._SfSearchStartDate as HTMLInputElement).value).toISOString().slice(0, 10) )
         this._SfSearchStartDate.setAttribute('max', new Date((this._SfSearchEndDate as HTMLInputElement).value).toISOString().slice(0, 10) )
-
-        // let event = new Event('click')
-        // this._sfButtonAll.dispatchEvent(event)
+        if (!this.isAdmin()){
+          let event = new Event('click')
+          this._sfButtonAll.dispatchEvent(event)
+        }
         // this._sfInputSearch.value = this.searchPhrase == null ? "" : this.searchPhrase;
         // var event = new Event('keyup');
         // this._sfInputSearch.dispatchEvent(event);
@@ -4895,9 +5008,11 @@ export class SfITicketing extends LitElement {
             <div part="badge" class="badge">Create New</div>
           </div>
           <br />
-          <div class="d-flex justify-start">
+          <div class="d-flex justify-center">
             <div class="lb"></div>
-            <button id="button-back" part="button-icon" class="button-icon"><span class="material-icons">keyboard_backspace</span></button>
+            <div class="d-flex flex-grow justify-start">
+              <button id="button-back" part="button-icon" class="button-icon"><span class="material-icons">keyboard_backspace</span></button>
+            </div>
             <div class="rb"></div>
           </div>
           <br />
@@ -4943,19 +5058,19 @@ export class SfITicketing extends LitElement {
         <div class="d-flex justify-center">
             <h1 part="title">${this.name}</h1>
         </div>
-        <div id="decrypt-container" class="d-flex flex-col justify-center">
+        <div id="decrypt-container" class="d-flex flex-col justify-center mt-20">
           <div class="d-flex mb-10">
             <div class="lb" part="lb"></div>
             <div class="d-flex align-end justify-between flex-grow">
               <div class="d-flex flex-col">
-                <sf-i-form id="sf-i-project-decrypt" name="Projects" label="Select Project *" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;locations&quot;,&quot;plan&quot;,&quot;logo&quot;,&quot;shortid&quot;,&quot;plan&quot;]" mandatory="">
+                <sf-i-form id="sf-i-project-decrypt" class="mr-10" name="Projects" label="Select Project *" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;locations&quot;,&quot;plan&quot;,&quot;logo&quot;,&quot;shortid&quot;,&quot;plan&quot;]" mandatory="">
                 </sf-i-form>
               </div>
               <div class="d-flex flex-col">
                 <label>Decrypt Utility</label>
                 <div class="d-flex align-end">
                   <input part="input" id="input-decrypt" type="text" placeholder="file key" />.json&nbsp;&nbsp;
-                  <button id="button-decrypt" part="button-icon" class="material-icons button-icon" disabled>download</button>
+                  <button id="button-decrypt" part="button-icon-small" class="material-icons button-icon" disabled>download</button>
                 </div>
                 <div class="loader-element"></div>
               </div>
@@ -4994,30 +5109,29 @@ export class SfITicketing extends LitElement {
           <div id="search-badge" class="d-flex justify-center">
             <div part="badge" class="badge">Search</div>
           </div>
-          <br />
-          <div class="d-flex" id="search-filters-container">
+          <div class="d-flex mt-20" id="search-filters-container">
             <div class="lb" part="lb"></div>
             <div class="d-flex align-stretch justify-between flex-col">
-              <div class="d-flex align-center justify-between flex-grow row-gap-5 flex-wrap">
+              <div class="d-flex align-center justify-between flex-grow row-gap-10 flex-wrap">
                 <sf-i-form part="search-project" id="search-project" class="search-input" name="Project" label="Project" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="multiselect-dropdown" searchphrase="" selectprojection="name"></sf-i-form>
-                <sf-i-form part="search-initiator" id="search-initiator" class="search-input" name="Initiator" label="Initiator" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" searchphrase="" selectprojection="name"></sf-i-form>
-                <sf-i-form part="search-assignedto" id="search-assignedto" class="search-input" name="FlaggGRC Administrator" label="FlaggGRC Administrator" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" searchphrase="" selectprojection="name"></sf-i-form>
+                <sf-i-form part="search-initiator" id="search-initiator" class="search-input" name="Initiated By" label="Initiated By" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" searchphrase="" selectprojection="name"></sf-i-form>
+                <sf-i-form part="search-assignedto" id="search-assignedto" class="search-input" name="Assigned To" label="Assigned To" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" searchphrase="${this.adminProfileShortcode}" selectprojection="name"></sf-i-form>
               </div>
-              <div class="d-flex align-center justify-between flex-grow row-gap-5 flex-wrap">
+              <div class="d-flex align-center justify-between flex-grow row-gap-10 mt-20 flex-wrap">
                 <div class="search-input d-flex flex-col justify-center align-stretch">
-                  <label>Category</label>
+                  <label part="input-label">Category</label>
                   <div class="d-flex w-100-m-0">
                     <select class="w-100" part="input-select" id="search-category"><option value="noselect" disable="" hidden="">Select</option></select>
                   </div>
                 </div>
                 <div class="search-input d-flex flex-col justify-center align-stretch">
-                  <label>Priority</label>
+                  <label part="input-label">Priority</label>
                   <div class="d-flex w-100-m-0">
                     <select class="w-100" part="input-select" id="search-priority"><option value="noselect" disable="" hidden="">Select</option></select>
                   </div>
                 </div>
                 <div class="search-input d-flex flex-col justify-center align-stretch">
-                  <label>Status</label>
+                  <label part="input-label">Status</label>
                   <div class="d-flex w-100-m-0">
                     <select class="w-100" part="input-select" id="search-status"><option value="noselect" disable="" hidden="">Select</option></select>
                   </div>
@@ -5026,25 +5140,23 @@ export class SfITicketing extends LitElement {
             </div>
             <div class="rb" part="rb"></div>
           </div>
-          <div class="d-flex">
+          <div class="d-flex mt-20">
             <div class="lb" part="lb"></div>
-            <div class="d-flex align-end justify-between flex-grow">
+            <div class="d-flex align-end justify-between mt-20">
               <div class="d-flex flex-col" part="date-filter-container">
-                <div class="d-flex align-end">
-                  <div class="w-50-m-0" part="date-input-container">
+                <div class="d-flex align-end pb-10">
+                  <div class="w-50-m-0 mr-10" part="date-input-container">
                     <label part="input-label">From Date *</label><br>
                     <input part="input" id="search-startdate" type="date" class="w-100-m-0" mandatory="" autocomplete="off" style="display: block;">
                   </div>
-                  <div class="w-50-m-0" part="date-input-container">
+                  <div class="w-50-m-0 mr-10" part="date-input-container">
                     <label part="input-label">To Date *</label><br>
                     <input part="input" id="search-enddate" type="date" class="w-100-m-0" mandatory="" autocomplete="off" style="display: block;">
-                  </div>&nbsp;&nbsp;
-                  <button id="button-all" part="button-icon" class="material-icons button-icon">filter_list</button>
-                </div>
+                  </div>
+                  <button id="button-all" part="button-icon" class="material-icons button-icon mr-10">filter_list</button>
+                  <button id="button-new" part="button-icon" class="material-icons button-icon">add</button>
+                  </div>
                 <div class="loader-element"></div>
-              </div>
-              <div class="d-flex">
-                <button id="button-new" part="button-icon" class="material-icons button-icon">add</button>
               </div>
             </div>
             <div class="rb" part="rb"></div>

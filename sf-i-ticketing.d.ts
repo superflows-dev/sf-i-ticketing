@@ -49,6 +49,7 @@ export declare class SfITicketing extends LitElement {
     selectedSearchId: string[];
     searchParams: any;
     searchInputIds: string;
+    adminProfileShortcode: string;
     preselectedValues: string;
     getPreselectedValues: () => any;
     label: string;
@@ -194,6 +195,7 @@ export declare class SfITicketing extends LitElement {
     checkButtonStates: () => void;
     loopThroughSearchResults: () => Promise<void>;
     initSearchView: () => void;
+    initSearchListeners: () => void;
     populateSearchFilterValues: () => void;
     initDecryptView: () => void;
     initDecryptListeners: () => void;
@@ -210,6 +212,7 @@ export declare class SfITicketing extends LitElement {
     initListenersNew: () => void;
     initListenersSearch: () => void;
     initListenersDetail: () => void;
+    updateComment: (index: number, newValue: any) => void;
     populateSelectedViewToDetailValues: () => void;
     checkIfAlreadySelected: (value: string) => boolean;
     populatePreselected: () => void;
