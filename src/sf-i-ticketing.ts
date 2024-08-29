@@ -2459,7 +2459,6 @@ export class SfITicketing extends LitElement {
       const jsonRespose = JSON.parse(xhr.responseText);
       this.setError(jsonRespose.error);
     }
-
   }
 
   populateValues = () => {
@@ -4266,10 +4265,17 @@ export class SfITicketing extends LitElement {
     }
     let oldText = (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLInputElement).innerHTML;
     let fieldName = this.getFields()[index];
+    let oldValue = this.getInputValue(this.getInputs()[index]).text
+    
     let splitArr = oldText.split('(');
     let entryFound = false
     for(let [i, splitStr] of splitArr.entries()){
       if(splitStr.indexOf(`${fieldName} changed to`) >= 0){
+        if(oldValue == newValue){
+          splitArr.splice(i,1)
+          entryFound = true
+          break;  
+        }
         splitArr[i] = `${fieldName} changed to ${newValue})`;
         entryFound = true
       }
