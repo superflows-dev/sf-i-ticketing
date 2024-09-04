@@ -1184,7 +1184,13 @@ export class SfITicketing extends LitElement {
       }
       
     } else {
-      if((this._SfFormC[0].querySelector('#' + id) as HTMLElement).style.display == "none") {
+      if(id == "sf-i-reporting-date"){
+        let reportingDate = (this._SfFormC[0].querySelector('#' + id)).value;
+        value = {
+          type: "input",
+          value: new Date(reportingDate).getTime() + ""
+        }
+      } else if((this._SfFormC[0].querySelector('#' + id) as HTMLElement).style.display == "none") {
         if(this.getUseInApi().includes(this.getFieldFromInput(id))) {
           value = (this._SfFormC[0].querySelector('#' + id)).value;
           value = {
@@ -1198,7 +1204,8 @@ export class SfITicketing extends LitElement {
             value: ""
           }
         }
-      } else {
+      }  else {
+        
         value = (this._SfFormC[0].querySelector('#' + id)).value;
         value = {
           type: "input",
@@ -1207,7 +1214,9 @@ export class SfITicketing extends LitElement {
       }
       
     }
-
+    if(id == "sf-i-reporting-date"){
+      console.log('input value',value)
+    }
     return value;
   }
 
@@ -2384,7 +2393,7 @@ export class SfITicketing extends LitElement {
           "attachment":attachment
         })
       }else{
-        values[field] = this.getInputValue(this.getInputs()[i])
+        values[field] = this.getInputValue(this.getInputs()[i + 2])
       }
 
     }
@@ -2488,7 +2497,7 @@ export class SfITicketing extends LitElement {
           "attachment":attachment
         })
       }else{
-        values[field] = this.getInputValue(this.getInputs()[i])
+        values[field] = this.getInputValue(this.getInputs()[i + 2])
       }
 
     }
@@ -3046,9 +3055,19 @@ export class SfITicketing extends LitElement {
         }else{
           element.style.display = 'block';
           (element as SfIForm).searchPhrase = this.adminProfileShortcode;
-          console.log('SFIFORM_load_Mode',1);
+          console.log('SFIFORM_load_Mode',1, element, i, this.getInputs());
           (element as SfIForm).loadMode()
           this._sfSlottedForm[0].querySelector('#sf-i-assignedto-container').style.display = 'block'
+        }
+      }else if(this.getInputs()[i] == "sf-i-reporting-date"){
+        if(!this.isAdmin() && this.mode == "new"){
+          element.style.display = 'none';
+          elementLabel.style.display = 'none'
+          this._sfSlottedForm[0].querySelector('#sf-i-reporting-date-container').style.display = 'none'
+        }else{
+          element.style.display = 'flex';
+          elementLabel.style.display = 'inline'
+          this._sfSlottedForm[0].querySelector('#sf-i-reporting-date-container').style.display = 'flex'
         }
       }else if(this.getInputs()[i] == "sf-i-comments"){
         if(this.mode == "new"){
@@ -4017,6 +4036,10 @@ export class SfITicketing extends LitElement {
       elementInitiator.loadMode();
       console.log('prepopulate input initiator',(elementInitiator as SfIForm).selectedSearchId)
     }
+    // let d = new Date();
+    // let [day,month,year] = Util.getDayMonthYear(d)
+    // let elementReportingDate = this._sfSlottedForm[0].querySelector('#sf-i-reporting-date') as HTMLInputElement
+    // elementReportingDate.value = "" + year + "-" + month + "-" + day
   }
 
   initListenersNew = () => {
@@ -4264,7 +4287,7 @@ export class SfITicketing extends LitElement {
       return;
     }
     let oldText = (this._sfSlottedForm[0].querySelector('#sf-i-changes') as HTMLInputElement).innerHTML;
-    let fieldName = this.getFields()[index];
+    let fieldName = this.getFields()[index - 2];
     let oldValue = this.getInputValue(this.getInputs()[index]).text
     
     let splitArr = oldText.split('(');
@@ -4293,7 +4316,10 @@ export class SfITicketing extends LitElement {
     for(var i = 0; i < this.getInputs().length; i++) {
       
       const element = this._sfSlottedForm[0].querySelector('#' + this.getInputs()[i]);
-      const val = this.selectedTicketDetails[this.getFields()[i]]
+      let val = this.selectedTicketDetails[this.getFields()[i]]
+      if(element.id != "sf-i-comment-content" && element.id != "sf-i-comment-attachment" && element.id != "sf-i-comments"){
+        val = this.selectedTicketDetails[this.getFields()[i - 2]]
+      }
       console.log('populating detail',element, element.nodeName.toLowerCase(), val);
 
       if(element.nodeName.toLowerCase() == "sf-i-select") {
@@ -4311,7 +4337,7 @@ export class SfITicketing extends LitElement {
         if(element.id == "sf-i-project"){
           console.log("input project val", val, element, element.flow)
         }
-
+        console.log('populating form', element,val,i, this.getFields(), this.getInputs());
         (element as SfIForm).selectedSearchId = val.value[0] == null ? [] : [val.value[0]];
         console.log('SFIFORM_load_Mode',5, element.id);
         (element as SfIForm).loadMode();

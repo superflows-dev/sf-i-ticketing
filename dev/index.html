@@ -367,69 +367,60 @@
   <body>
     <!-- "[&quot;sf-i-project&quot;, &quot;sf-i-initiator&quot;, &quot;sf-i-assignedto&quot;, &quot;sf-i-category&quot;, &quot;sf-i-priority&quot;, &quot;sf-i-status&quot;, &quot;sf-i-comments&quot;, &quot;sf-i-comment-content&quot;, &quot;sf-i-comment-attachment&quot;]" -->
     <!-- <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="dwqyez2puoxmu.cloudfront.net/ticketing" mode="downloader"></sf-i-ticketing> -->
-    <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="dwqyez2puoxmu.cloudfront.net/ticketing" mode="view" userid="1c84ef8f-4e72-4ddf-8f9b-6ebd0b740cf3" username="Ninad Thatte" inputIds="[&quot;sf-i-project&quot;, &quot;sf-i-initiator&quot;, &quot;sf-i-assignedto&quot;, &quot;sf-i-category&quot;, &quot;sf-i-priority&quot;, &quot;sf-i-status&quot;, &quot;sf-i-comments&quot;, &quot;sf-i-comment-content&quot;, &quot;sf-i-comment-attachment&quot;]" fields="[&quot;project&quot;,&quot;initiator&quot;,&quot;assignedto&quot;,&quot;ticketcategory&quot;,&quot;ticketpriority&quot;,&quot;ticketstatus&quot;,&quot;comments&quot;]" validations="{&quot;sf-i-category&quot;:  &quot;select&quot;, &quot;sf-i-priority&quot;:  &quot;select&quot;, &quot;sf-i-status&quot;:  &quot;select&quot;, &quot;sf-i-comment-content&quot;:  &quot;select&quot;}" unitfiltersnew="[{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;value&quot;: &quot;d423ccca-f974-4c25-ad34-3414714a4348&quot;},{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;disable&quot;: &quot;true&quot;}]" searchphrase="" selectprojection="name" ignoreprojections="[&quot;comments&quot;,&quot;id&quot;]" mandatory="" adminProfileShortcode="FlaggGRC-Administrator">
+    <sf-i-ticketing id="ticketing-0" name="Ticketing" apiid="dwqyez2puoxmu.cloudfront.net/ticketing" mode="view" userid="1c84ef8f-4e72-4ddf-8f9b-6ebd0b740cf3" username="Ninad Thatte" inputids="[&quot;sf-i-comments&quot;, &quot;sf-i-comment-content&quot;, &quot;sf-i-comment-attachment&quot;, &quot;sf-i-category&quot;, &quot;sf-i-priority&quot;, &quot;sf-i-status&quot;, &quot;sf-i-project&quot;, &quot;sf-i-initiator&quot;, &quot;sf-i-assignedto&quot;]" fields="[&quot;comments&quot;, &quot;ticketcategory&quot;,&quot;ticketpriority&quot;,&quot;ticketstatus&quot;, &quot;project&quot;,&quot;initiator&quot;,&quot;assignedto&quot;]" validations="{&quot;sf-i-category&quot;:  &quot;select&quot;, &quot;sf-i-priority&quot;:  &quot;select&quot;, &quot;sf-i-status&quot;:  &quot;select&quot;, &quot;sf-i-comment-content&quot;:  &quot;select&quot;}" unitfiltersnew="[{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;value&quot;: &quot;d423ccca-f974-4c25-ad34-3414714a4348&quot;},{&quot;op&quot;: &quot;select&quot;, &quot;input&quot;: &quot;sf-i-status&quot;, &quot;disable&quot;: &quot;true&quot;}]" searchphrase="" selectprojection="name" ignoreprojections="[&quot;comments&quot;,&quot;id&quot;]" mandatory="" adminprofileshortcode="FlaggGRC-Administrator">
       <div slot="form">
-        <div class="d-flex justify-center align-start" id="new-comment-container">
-          <div class="w-100-m-0 mb-20">
-            <label id="sf-i-comment-content-label">New Comment *</label><br />
-            <input id="sf-i-comment-content" type="text" class="w-100-m-0" mandatory/>
-            <div class="w-100-m-0 max-height-200 flex-col" id="sf-i-changes"></div>
-            <label id="sf-i-comment-attachment-label">Attachment</label><br>
-            <sf-i-uploader id="sf-i-comment-attachment" max="4" apiid="1peg5170d3" allowedextensions="[&quot;jpg&quot;,&quot;png&quot;]" extract="no" style="display: block;"></sf-i-uploader>
+          <div id="new-comment-container" style="display: none;">
+              <div class="w-100 mb-20">
+                  <label id="sf-i-comment-content-label" class="support-label" part="input-label">New Comment *</label><br>
+                  <input id="sf-i-comment-content" type="text" class="w-100-m-0" mandatory="" fdprocessedid="cueb7" disabled="disabled" style="display: flex;">
+                  <div class="w-100-m-0 max-height-200 flex-col mt-20" id="sf-i-changes"></div>
+                  <div class="w-100 mb-20"></div>
+                  <label id="sf-i-comment-attachment-label" class="support-label">Attachment</label><br>
+                  <sf-i-uploader class="w-100" id="sf-i-comment-attachment" max="4" apiid="1peg5170d3" allowedextensions="[&quot;jpg&quot;,&quot;png&quot;]" extract="no" style="display: flex;"></sf-i-uploader>
+              </div>
           </div>
-        </div>
-        <div class="d-flex justify-center align-start" id="sf-i-comments-container">
-          <div class="w-100-m-0 mb-20">
-            <label id="sf-i-comments-label">Comments</label><br>
-            <div class="w-100-m-0 max-height-200 flex-col" id="sf-i-comments">
+          <div class="d-flex justify-center align-start" id="sf-i-comments-container" style="display: flex;">
+          <div class="w-100p">
+              <label id="sf-i-comments-label" class="support-label" style="display: inline;">Comments</label><br>
+              <div class="w-100-m-0 max-height-200 flex-col" id="sf-i-comments" style="display: flex;"><div part="comment-user" class="comment-user d-flex align-start flex-wrap flex-col align-self-end"><p part="comment-user-content" class="comment-user-content">Dear Sir,Can you please arrange a training session for all the compliance understanding.After the understanding, we will be able use this tool properly.Thanks &amp; Regards,Deeksha</p><sf-i-uploader id="sf-i-comment-attachment-0" part="comment-user-attachment" class="comment-user-attachment" max="10" apiid="1peg5170d3" allowedextensions="[&quot;jpg&quot;,&quot;png&quot;]" extract="no" mode="view" maximize="yes"></sf-i-uploader><p part="comment-user-name" class="comment-user-name">Jomon Joseph</p><p part="comment-user-timestamp" class="comment-user-timestamp">8/27/2024-6:40:20 PM</p></div></div>
 
-            </div>
-
           </div>
-        </div>
-        <div class="d-flex justify-center align-start">
-          <div class="w-100-m-0 mb-20">
-            <label id="sf-i-category-label">Category *</label><br>
-            <div class="d-flex w-100-m-0">
-              <select part="input-select" id="sf-i-category" mandatory=""><option value="noselect" disable="" hidden="">Select</option></select>
-            </div>
           </div>
-        </div>
-        <div class="d-flex justify-center align-start">
-          <div class="w-100-m-0 mb-20">
-            <label id="sf-i-priority-label">Priority *</label><br>
-            <div class="d-flex w-100-m-0">
-              <select part="input-select" id="sf-i-priority" mandatory=""><option value="noselect" disable="" hidden="">Select</option></select>
-            </div>
+          <div class="d-flex justify-start align-start mt-40">
+              <div class="mr-10 w-30">
+                  <label id="sf-i-category-label" class="support-label">Category *</label><br>
+                  <div class="d-flex w-100-m-0 mt-5">
+                      <select part="input-select" id="sf-i-category" mandatory="" class="w-100p" fdprocessedid="ni86z" disabled="disabled" style="display: flex;"><option value="noselect" disable="" hidden="">Select</option><option value="b1bf6e65-3abd-4c42-a8ae-e9bccf048f06">Technical</option><option value="d083564f-a937-4316-99b0-32967f9d1ed8">Sales</option><option value="cb5d783f-d30b-4b41-84da-db1eafa40cbf">Advisory</option></select>
+                  </div>
+              </div>
+              <div class="mr-10 w-30">
+                  <label id="sf-i-priority-label" class="support-label">Priority *</label><br>
+                  <div class="d-flex w-100-m-0 mt-5">
+                  <select part="input-select" id="sf-i-priority" mandatory="" class="w-100p" fdprocessedid="j7ippr" disabled="disabled" style="display: flex;"><option value="noselect" disable="" hidden="">Select</option><option value="1a5ac2a4-799e-4703-aeab-23016c9e10cc">High</option><option value="e9b0107d-e022-4002-a380-0903d1292de8">Medium</option><option value="80d65b6d-775b-4b94-b7ae-1ae80093e805">Low</option></select>
+                  </div>
+              </div>
+              <div class="mr-10 w-30" id="sf-i-status-container" style="display: block;">
+                  <label id="sf-i-status-label" class="support-label">Status *</label><br>
+                  <div class="d-flex w-100-m-0 mt-5">
+                  <select part="input-select" id="sf-i-status" mandatory="" class="w-100p" fdprocessedid="deyhi" disabled="disabled" style="display: block;"><option value="noselect" disable="" hidden="">Select</option><option value="d423ccca-f974-4c25-ad34-3414714a4348">Opened</option><option value="b1e63ee1-bae1-4710-9057-cdc559ba975b">In Progress</option><option value="637ab675-f347-4c26-b9be-5e963fac158c">Pending Client Input</option><option value="60803b66-35e0-4701-8454-8b19aa760bb8">Resolved</option><option value="77c75bcc-6998-47b4-9689-c5f4d9292d3f">Closed</option><option value="a826ce2f-ef20-4d27-b215-4bc97f7a1b9b">Re-Opened</option><option value="b4737c49-40a9-480c-a009-6fded9c58eb5">Cancelled</option></select>
+                  </div>
+              </div>
           </div>
-        </div>
-        <div class="d-flex justify-center align-start" id="sf-i-status-container">
-          <div class="w-100-m-0 mb-20">
-            <label id="sf-i-status-label">Status *</label><br>
-            <div class="d-flex w-100-m-0">
-              <select part="input-select" id="sf-i-status" mandatory=""><option value="noselect" disable="" hidden="">Select</option></select>
-            </div>
+          <div class="d-flex justify-start align-start mt-40">
+              <div class="mr-10 w-30">
+                  <sf-i-form id="sf-i-project" name="Projects" label="Project *" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;logo&quot;,&quot;plan&quot;,&quot;address&quot;,&quot;emails&quot;,&quot;vertical&quot;,&quot;cycledate&quot;,&quot;shortid&quot;,&quot;startdate&quot;,&quot;contractdate&quot;,&quot;quality&quot;,&quot;locations&quot;,&quot;shortnumid&quot;,&quot;confighome&quot;,&quot;lastmodifiedby&quot;,&quot;lastmodifiedtime&quot;]" mandatory="" maxselect="1" style="display: flex;">
+                  </sf-i-form>
+              </div>
+              <div class="mr-10 w-30">
+                  <sf-i-form id="sf-i-initiator" name="Initiator" label="Initiator" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;,&quot;lastmodifiedby&quot;,&quot;lastmodifiedtime&quot;]" mandatory="" maxselect="1" style="display: flex;">
+              </sf-i-form>
+              </div>
+              <div class="mr-10 w-30" id="sf-i-assignedto-container" style="display: block;">
+                  <sf-i-form id="sf-i-assignedto" name="FlaggGRCC Administrator" label="Assigned To" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]" maxselect="1" style="display: block;">
+                  </sf-i-form>
+              </div>
           </div>
-        </div>
-        <div class="d-flex justify-center align-start">
-          <div class="w-100-m-0 mb-20">
-            <sf-i-form id="sf-i-project" name="Projects" label="Project *" apiid="dnytrdlrmxgsy.cloudfront.net/project" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;logo&quot;,&quot;plan&quot;,&quot;address&quot;,&quot;emails&quot;,&quot;vertical&quot;,&quot;cycledate&quot;,&quot;shortid&quot;,&quot;startdate&quot;,&quot;contractdate&quot;,&quot;quality&quot;,&quot;locations&quot;,&quot;shortnumid&quot;]" mandatory="" maxSelect="1">
-            </sf-i-form>
-          </div>
-        </div>
-        <div class="d-flex justify-center align-start">
-          <div class="w-100-m-0 mb-20">
-            <sf-i-form id="sf-i-initiator" name="Initiator" label="Initiator" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]" mandatory="" maxSelect="1">
-            </sf-i-form>
-          </div>
-        </div>
-        <div class="d-flex justify-center align-start" id="sf-i-assignedto-container">
-          <div class="w-100-m-0 mb-20">
-            <sf-i-form id="sf-i-assignedto" name="FlaggGRCC Administrator" label="Assigned To" apiid="dnytrdlrmxgsy.cloudfront.net/userprofile" mode="multiselect-dropdown" selectprojection="name" searchphrase="" ignoreprojections="[&quot;updatetype&quot;,&quot;usermap&quot;,&quot;kra&quot;,&quot;shortid&quot;,&quot;shortnumid&quot;,&quot;trainingstatute&quot;,&quot;role&quot;,&quot;project&quot;]" maxSelect="1">
-            </sf-i-form>
-          </div>
-        </div>
       </div>
-    </sf-i-ticketing>
+  </sf-i-ticketing>
   </body>
 </html>
