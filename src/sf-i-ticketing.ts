@@ -1382,7 +1382,7 @@ export class SfITicketing extends LitElement {
               console.log('object.keys', cols[j], Object.keys(data[j]).length)
               html += ('<sf-i-elastic-text text="'+data[j]['text']+'" minLength="20"></sf-i-elastic-text>')
             } else if(!isNaN(data[j])) {
-              html += ('<sf-i-elastic-text text="'+(new Date(parseInt(data[j])).toLocaleDateString()) + "-" + (new Date(parseInt(data[j])).toLocaleTimeString())+'" minLength="50"></sf-i-elastic-text>')
+              html += ('<sf-i-elastic-text text="'+(Util.getDateTimeStrings(parseInt(data[j])))+'" minLength="50"></sf-i-elastic-text>')
             } else {
               html += ('<sf-i-elastic-text text="'+data[j]+'" minLength="20"></sf-i-elastic-text>')
             }
@@ -4375,7 +4375,7 @@ export class SfITicketing extends LitElement {
           }
           html += `<p part="comment-user-name" class="comment-user-name">${tempVal[j]['username']}</p>`
           let createDate = new Date(parseInt(tempVal[j]['timestamp']))
-          html += `<p part="comment-user-timestamp" class="comment-user-timestamp">${createDate.toLocaleDateString()}-${createDate.toLocaleTimeString()}</p>`
+          html += `<p part="comment-user-timestamp" class="comment-user-timestamp">${Util.getDateTimeStrings(createDate.getTime())}</p>`
           html += `</div>`
         }
         console.log('comments populated', html);

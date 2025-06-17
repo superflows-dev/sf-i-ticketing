@@ -1,7 +1,7 @@
 {
   "name": "sf-i-ticketing",
   "private": false,
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Superflows Navigation Component",
   "main": "sf-i-ticketing.js",
   "module": "sf-i-ticketing.js",
